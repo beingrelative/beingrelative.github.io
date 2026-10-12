@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method description · Policy Harness</title>
+<meta name="description" content="Method description for the τ³-bench banking_knowledge custom submission: a deterministic policy layer for tool-using LLM agents.">
+<link rel="canonical" href="https://beingrelative.github.io/policy-harness/method/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+  table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 8px 0 14px; }
+  th, td { border: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--chip); }
+  td.n { font-variant-numeric: tabular-nums; }
+  ol li, ul li { margin: 5px 0; }
+  code { font-size: 14px; background: var(--chip); padding: 0 4px; border-radius: 4px; }
+  h1 { font-size: 28px; margin: 0 0 6px; line-height: 1.3; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="topbar"><a href="../">← Policy Harness project page</a><a href="../../">Geunho Lee</a></nav>
+
+<header class="hero">
+  <h1>A deterministic policy layer for tool-using LLM agents — method description</h1>
+  <p class="tagline">For the τ³-bench <code>banking_knowledge</code> custom submission (Qwen3.8-27B-FP8 + Policy Harness). Geunho Lee, independent researcher · <a href="mailto:beingrelative@gmail.com">beingrelative@gmail.com</a></p>
+</header>
+
+<section>
+  <h2>What this is</h2>
+  <p>We evaluated an open-weights model (Qwen3.8-27B-FP8, not fine-tuned) on τ³-bench <code>banking_knowledge</code> with a policy layer installed around the standard τ² agent scaffold. The layer does not learn and does not replace the model's judgement: its rule engine checks a proposed turn against declarative rules before the turn is committed, and asks the same model to regenerate when a rule is violated.</p>
+  <p>This page documents what the layer does, what it does not do, and how the reported numbers were produced. τ-bench requires custom submissions to link an implementation or methodology description; the code itself is not public.</p>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <table>
+    <tr><th>Arm</th><th>pass^1</th><th>pass^2</th><th>pass^3</th><th>pass^4</th></tr>
+    <tr><td>Qwen3.8-27B-FP8, standard scaffold (no layer)</td><td class="n">49.48</td><td class="n">39.69</td><td class="n">33.51</td><td class="n">—</td></tr>
+    <tr><td>Qwen3.8-27B-FP8 + policy layer (custom)</td><td class="n"><b>57.22</b></td><td class="n">46.39</td><td class="n">39.69</td><td class="n">35.05</td></tr>
+  </table>
+  <p>All 97 base-split tasks × 4 trials, user simulator <code>gpt-5.2</code> (temperature 0, reasoning effort low), retrieval <code>alltools</code>, seed 300, tau2-bench v1.0.1 (<code>fc0055d</code>). The layer arm has 0 infrastructure-error simulations and comes from a single code commit. The no-layer arm has one infrastructure-error simulation (task_091, trial 2), which is why its pass^4 is reported as null.</p>
+  <p>For context beyond this leaderboard: with its domain rules replaced and the engine code unchanged, the same layer moves SOPBench <code>library</code> from 56.8 to 72.0 pass^1 for this model (official scorer, 4 runs each; a thin adapter connects the engine to that harness), and on τ²-airline it moves GPT-4o-mini from 27.0 to 49.0. The gain tracks how often a model breaks rules that the record can settle; in τ²-retail it was within noise for every model we ran. Details are on the <a href="../">project page</a>.</p>
+</section>
+
+<section>
+  <h2>What the layer does</h2>
+  <p>The layer sits between the agent model and the benchmark's tool interface. Benchmark tasks, domain policy documents, domain tools, the user simulator, and the evaluator are unmodified.</p>
+  <ol>
+    <li><b>Pre-commit check.</b> When the model proposes a turn, the layer evaluates it against declarative rules for the domain. A denied turn is returned to the same model with the violation fact and the quoted policy sentence — no suggested value, no suggested next action. The model decides what to do. The regeneration budget is 2; a turn that still violates after the budget is passed through rather than blocked indefinitely.</li>
+    <li><b>Closed predicates only.</b> A blocking rule may only test what can be decided by inspection: whether an event occurred, what a record's field is, whether a string is present in a tool output. Conditions that need interpretation are not enforced by the layer; they are left to the model.</li>
+    <li><b>Verifier tools.</b> The layer exposes tools that compute policy quantities (limits, eligibility counts, time differences) from records the agent itself fetched. The layer does not query the environment on its own.</li>
+    <li><b>Grounding check.</b> Before a write, each value argument must be attributable to a tool output the agent received or to the customer's words. Values that exist only in the model's own text are rejected.</li>
+    <li><b>Context management.</b> The layer appends derived facts after read-tool outputs and compacts the conversation view when it grows past the model's window.</li>
+    <li><b>Auxiliary sub-calls.</b> For extraction and classification (for example, listing the customer's requests) the layer calls the same Qwen model in isolation, with only the material needed for that one decision.</li>
+  </ol>
+  <p>Everything the layer adds — tools, messages, denials — is visible in the submitted trajectory files.</p>
+</section>
+
+<section>
+  <h2>What the layer does not do</h2>
+  <ul>
+    <li>It does not train, fine-tune, or adapt the model in any way.</li>
+    <li>It does not read hidden task goals, reference actions, or evaluator state at run time.</li>
+    <li>It does not decide the agent's next action. Denial messages carry a fact and a policy quotation, never an instruction or a value.</li>
+    <li>It does not block on open-ended or semantic conditions.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Development disclosure</h2>
+  <p>The rules for <code>banking_knowledge</code> were developed <b>on the evaluation tasks themselves</b>, using per-task outcomes (rewards) and inspection of reference solutions. This submission is therefore <b>not test-blind</b>, and <code>methodology.verification.modified_prompts</code> is set to <code>true</code>.</p>
+  <p>To make the number interpretable we audited every rule item against its authoring evidence and sorted it into three kinds:</p>
+  <ul>
+    <li><b>A — policy or knowledge-base citation.</b> The rule quotes the domain documents the agent itself receives.</li>
+    <li><b>B — general rule from expert guidance.</b> The rule states a practice a domain expert would state without reference to any particular task.</li>
+    <li><b>C — fitted to the evaluation set.</b> The rule's form was chosen because it matched reference solutions or improved the reward on specific tasks.</li>
+  </ul>
+  <p>Twelve items had no policy or knowledge-base citation. The audit classified ten of them as kind C and two as kind B. <b>The submitted configuration removes all ten C items.</b> A configuration that kept them scored higher; it is not submitted.</p>
+  <p>To check whether the authoring procedure generalizes beyond the tasks it was developed on, we repeated it on τ²-airline with a held-out split: rules were rebuilt from 30 training tasks and evaluated on the 20 remaining tasks. GPT-4o-mini moved from 31.2 to 52.5 pass^1 on those 20 tasks. In a replay of the 30 training tasks, no rule blocked a call that had succeeded. The split is not fully independent: four of the six rules reuse predicates written earlier from the policy alone, in a session that had seen one of the test tasks.</p>
+</section>
+
+<section>
+  <h2>Reproducing the reported numbers</h2>
+  <p>The trajectory file for each arm contains every simulation, including the layer's added tools and messages. pass^k can be recomputed from it with the benchmark's own metric code; we checked that the numbers in <code>submission.json</code> match such an independent recomputation. Execution was sharded one task per process across several vLLM replicas serving the same weights, with identical agent and user-simulator arguments throughout. The noise band we measured for this harness is 2σ ≈ 24 of 388 simulations. The 30-simulation gain over the no-layer arm (222 vs 192) is outside it, but not by a wide margin; gaps of a few simulations to nearby leaderboard entries are within it.</p>
+</section>
+
+<section>
+  <h2>Contact</h2>
+  <p>Geunho Lee (independent) · <a href="mailto:beingrelative@gmail.com">beingrelative@gmail.com</a> · <a href="https://github.com/beingrelative">github.com/beingrelative</a></p>
+</section>
+
+<footer>© 2026 Geunho Lee</footer>
+</div>
+</body>
+</html>
