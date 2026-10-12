@@ -28,7 +28,7 @@
   <p class="tagline">LLM agent harnesses (deterministic policy layers, isolated sub-calls, trajectory forensics), model tuning (SFT, DPO, RLVR), and serving. 29 years in systems software; the last 10 in machine learning and LLM platforms.</p>
   <div class="links">
     <a href="mailto:thisherenow@hotmail.com">Email</a>
-    <a href="LINKEDIN_URL">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/%EA%B7%BC%ED%98%B8-%EC%9D%B4-89bbba438/">LinkedIn</a>
     <a href="policy-harness/">Policy Harness (research)</a>
     <a href="https://patents.google.com/patent/KR102835457B1/en">Patent KR 10-2835457</a>
   </div>
@@ -36,7 +36,7 @@
 
 <section id="about">
   <h2>About</h2>
-  <p>I build LLM agents and the layers that make them dependable. In 2026 I designed a policy layer that checks every tool call an agent proposes just before it runs, using only conditions the conversation record can settle. With no extra training it lifted an open 27B model above the top public entry on τ³-bench banking, and moved to new benchmarks by swapping a single declaration file.</p>
+  <p>I build LLM agents and the layers that make them dependable. In 2026 I designed a policy layer that checks every tool call an agent proposes just before it runs, using only conditions the conversation record can settle. With no extra training it raised an open 27B model's τ³-bench banking pass^1 from 49.5 to 57.2 (board leader: 55.2), and it moved to new benchmarks by swapping the declaration file while the engine code stayed the same.</p>
   <p>Before that, at Nethru, I designed and built a behavior-data prediction and recommendation platform for financial clients and a marketing-analysis agent PoC for Woori Bank, demonstrated to the bank's CEO. Earlier I led an AI development division (industry–academia research with POSTECH, KAIST and Asan Medical Center; national R&amp;D programs) and, for 15 years, mobile, set-top and network-equipment software development.</p>
 </section>
 
@@ -45,11 +45,11 @@
   <div class="feature">
     <h3>Policy Harness — a deterministic policy layer for LLM agents</h3>
     <div class="sub">Independent research, 2026 · two patent applications filed</div>
-    <p>The layer sits between the model's proposed call and the real tool. It blocks only on conditions the transcript settles (a required lookup was done, a value appears in a tool output or the customer's words, a computation matches the record) and returns the unverified fact and the policy sentence so the model decides again. Same input, same verdict, with an audit log.</p>
+    <p>The layer sits between the model's proposed call and the real tool. It blocks only on conditions the transcript settles (a required lookup was done, a value appears in a tool output or the customer's words, a computation matches the record) and returns the unverified fact and the policy sentence so the model decides again. The rule engine gives the same verdict for the same input and keeps an audit log.</p>
     <div class="stats">
       <div class="stat"><b>49.5 → 57.2</b><span>τ³-bench banking pass^1, Qwen3.8-27B, 97 tasks × 4 (public #1: 55.2)</span></div>
       <div class="stat"><b>56.8 → 72.0</b><span>SOPBench library, official scorer, engine unchanged</span></div>
-      <div class="stat"><b>31.2 → 52.5</b><span>τ² airline held-out tasks, GPT-4o-mini, 0 correct actions blocked</span></div>
+      <div class="stat"><b>31.2 → 52.5</b><span>τ² airline, 20 held-out tasks, GPT-4o-mini</span></div>
     </div>
     <a class="more" href="policy-harness/">Read the project page →</a>
   </div>

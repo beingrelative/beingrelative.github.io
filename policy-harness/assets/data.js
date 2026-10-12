@@ -2,10 +2,9 @@
 // tools/check_publish.py refuses to pass while DRAFT is true. Labels are bilingual ({ko, en}).
 window.SITE = {
   DRAFT: false,
-  FILING_NO: "provisional-filed",  // filing recorded; the application number is kept out of public code
 
   banking: {
-    src: "results/reports/T3_SUBMIT_PREP.md",
+    src: "docs/blog/TECH_BLOG_LEADERBOARD_DRAFT.md §4.1 · leaderboard/METHOD_PAGE_DRAFT.md",
     arms: {
       base: { k: [49.48, 39.69, 33.51, null], t44: 29, t04: 35 },
       ours: { k: [57.22, 46.39, 39.69, 35.05], t44: 34, t04: 25 },
@@ -16,7 +15,7 @@ window.SITE = {
   // pass^1, no layer (a) → + layer (b). Engine unchanged; only the declaration file differs per domain.
   transfer: [
     { key: "sop", group: "SOPBench library", note: { ko: "66과제 × 4회 · 공식 채점기", en: "66 tasks × 4 · official scorer" },
-      src: "results/reports/SOPX4.md", ref: { official: 66.7, corr: 75.8, name: "GPT-5" }, rows: [
+      src: "results/reports/SOPX4.md · SOP_4OM.md · SOP_LOCAL.md", ref: { official: 66.7, corr: 75.8, name: "GPT-5" }, rows: [
       { m: "Qwen3.8-27B", a: 56.8, b: 72.0, corr: [69.3, 86.0] },
       { m: "GPT-4o-mini", a: 44.3, b: 50.4 },
       { m: "Qwen3-8B", a: 35.2, b: 46.2 },
@@ -24,17 +23,15 @@ window.SITE = {
       { m: "Qwen2.5-32B", a: 24.2, b: 34.8 },
     ]},
     { key: "air", group: "τ²-bench airline", note: { ko: "50과제 × 4회", en: "50 tasks × 4" },
-      src: "docs/blog/TECH_BLOG_LEADERBOARD_DRAFT.md §4.2 (LADDER_PREP.md)", rows: [
-      { m: "Qwen3.8-27B", a: 82.5, b: 83.5 },
+      src: "docs/blog/TECH_BLOG_LEADERBOARD_DRAFT.md §4.2 (LADF.md, LADF_Q25.md)", rows: [
       { m: "GPT-5.2", a: 56.5, b: 71.0 },
       { m: "Qwen3-8B", a: 37.8, b: 49.5 },
       { m: "Qwen3-14B", a: 37.5, b: 47.0 },
       { m: "Qwen2.5-32B", a: 29.0, b: 51.5 },
       { m: "GPT-4o-mini", a: 27.0, b: 49.0 },
     ]},
-    { key: "ret", group: "τ²-bench retail", note: { ko: "114과제 × 4회", en: "114 tasks × 4" },
-      src: "docs/blog/TECH_BLOG_LEADERBOARD_DRAFT.md §4.2 (API_ARMS_BUILD.md, RETF.md)", rows: [
-      { m: "Qwen3.8-27B", a: 80.4, b: 81.3 },
+    { key: "ret", group: "τ²-bench retail", note: { ko: "최대 114과제 × 4회", en: "up to 114 tasks × 4" },
+      src: "docs/blog/TECH_BLOG_LEADERBOARD_DRAFT.md §4.2 (LADF_Q25.md, RETF.md)", rows: [
       { m: "Kimi K2.5", a: 75.7, b: 75.4 },
       { m: "Qwen2.5-32B", a: 53.9, b: 52.9 },
       { m: "Qwen3-14B", a: 52.0, b: 53.9 },

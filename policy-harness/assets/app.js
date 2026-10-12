@@ -18,7 +18,7 @@
       logSub: '모든 판정과 그 근거', pass: '통과', deny: '거부', again: '다시 제안 · 예산 안에서', same: '같은 입력 → 같은 판정',
       lv: ['절차', '계산', '근거', '완결', '마무리', '부하', '재료'],
       ablH: '끄면 · 발동 과제 pass^1', below: '층 없음 이하', full: '전체 층', none: '층 없음',
-      clickFile: '파일을 눌러 바꿔 보세요', engine: '엔진', engineA: '≈3.3k줄 · 도메인 단어 0', engineB: '세 도메인 모두 같은 코드',
+      clickFile: '파일을 눌러 바꿔 보세요', engine: '엔진', engineA: '도메인 단어 0', engineB: '세 도메인 모두 같은 코드',
       files: ['banking 선언', 'library 선언', 'airline 선언'], p1: 'pass^1',
       sopRef: n => `공개 최고 GPT-5 ${n}`, corrNote: '보정값은 27B만 측정 · 나머지는 공식값(흐리게)',
       xAx: '층 없는 pass^1', yAx: '층을 더한 이득 (pp)', airNote: 'airline: 기준 점수가 낮은 모델에서 이득이 크다',
@@ -34,7 +34,7 @@
       logSub: 'every decision + its source', pass: 'PASS', deny: 'DENY', again: 'propose again · budgeted', same: 'same input → same decision',
       lv: ['order', 'compute', 'ground', 'complete', 'close', 'load', 'material'],
       ablH: 'Switched off · pass^1 on fired tasks', below: 'below no layer', full: 'full', none: 'none',
-      clickFile: 'click a file', engine: 'engine', engineA: '≈3.3k lines · 0 domain words', engineB: 'same code for all three',
+      clickFile: 'click a file', engine: 'engine', engineA: '0 domain words', engineB: 'same code for all three',
       files: ['banking declaration', 'library declaration', 'airline declaration'], p1: 'pass^1',
       sopRef: n => `best public GPT-5 ${n}`, corrNote: 'corrected values measured for 27B only; others official (faded)',
       xAx: 'pass^1 without the layer', yAx: 'gain from the layer (pp)', airNote: 'airline: weaker baselines gain the most',
@@ -335,7 +335,7 @@
         reads: '지금까지의 모든 도구 출력과 고객 메시지', dec: '이 인자 값이 거기에 나오는가? (정규화 후)', does: '쓰기를 막고, 출처 없는 인자를 알려 줍니다',
         ex: ['<span class="c"># 제안</span>', 'update_address(zip="94107", …)', '<span class="c"># 94107을 담은 메시지·도구 출력이 없음</span>', '<span class="d">NOT EXECUTED</span> update_address', '인자 zip: 어느 도구 출력이나 고객 메시지에도', '없는 값'] },
       { t: '요청은 빠짐없이', catch: '고객은 네 가지를 부탁했는데 세 가지만 하고 인사합니다.',
-        reads: '대화에서 뽑은 요청들과 실행한 행동들', dec: '(요청 집합 − 처리 집합)이 비었는가?', does: '남은 것을 한 번 보여 줍니다. 끄기 실험에서 이득이 없어 주장에서 뺐습니다',
+        reads: '대화에서 뽑은 요청들과 실행한 행동들', dec: '(요청 집합 − 처리 집합)이 비었는가?', does: '남은 것을 한 번 보여 줍니다. GPT-4o-mini airline에서 끄면 점수가 올라(58.3 vs 55.0) 주장에서 뺐습니다. banking에서는 끄면 내려갑니다',
         ex: ['요청: {A 취소, B 환불, C 변경, D 주소}', '처리: {A 취소, B 환불, C 변경}', '<span class="o">OPEN</span> D 주소 · 한 번 보여 주고 판단은 모델이'] },
       { t: '떠나기 전 열린 일', catch: '요청이 아직 남았는데 대화를 끝내거나 사람에게 넘깁니다.',
         reads: '열린 요청 상태: 행동 · 정보 · 이관 · 없음', dec: '떠나는 턴에 열린 의무가 남았는가?', does: '남은 항목을 한 번 보여 줍니다. 끝낼지는 여전히 모델이 정합니다',
@@ -355,10 +355,10 @@
         reads: 'Records the agent already fetched', dec: 'The value from a deterministic verifier; the model only picks which computation it needs', does: 'Adds verifier tools; a written amount must match the verifier on the same records',
         ex: ['<span class="c"># the model asks instead of doing arithmetic</span>', 'compute_&lt;quantity&gt;(record=…)', '<span class="p">→ &lt;amount&gt;</span>  inputs listed: two dates from fetched records', '<span class="c"># the write that follows uses this value</span>'] },
       { t: 'Every written value needs a source', catch: 'A value that appears in no tool output and no customer message, such as a reformatted date, an invented reason or a guessed login.',
-        reads: 'All tool outputs and customer messages so far', dec: 'Does this argument value appear there (after normalisation)?', does: 'Blocks the write; names the argument whose value has no source',
+        reads: 'All tool outputs and customer messages so far', dec: 'Does this argument value appear there (after normalization)?', does: 'Blocks the write; names the argument whose value has no source',
         ex: ['<span class="c"># proposed</span>', 'update_address(zip="94107", …)', '<span class="c"># no message or tool output contains 94107</span>', '<span class="d">NOT EXECUTED</span> update_address', 'argument zip: value does not appear in any tool', 'output or customer message'] },
       { t: 'Every request gets handled', catch: 'The customer asked for four things; the agent did three and said goodbye.',
-        reads: 'Requests extracted from the dialog and actions taken', dec: 'Is (requested set − handled set) empty?', does: 'Shows the remainder once. Slightly negative in ablation; not part of our claim',
+        reads: 'Requests extracted from the dialog and actions taken', dec: 'Is (requested set − handled set) empty?', does: 'Shows the remainder once. Switching it off raised the GPT-4o-mini airline score (58.3 vs 55.0) but lowered banking; not part of our claim',
         ex: ['requested: {cancel A, refund B, update C, address D}', 'handled:   {cancel A, refund B, update C}', '<span class="o">OPEN</span> address D · shown once, the model decides'] },
       { t: 'Open obligations before hand-off', catch: 'The agent ends or transfers the chat while a request is still open.',
         reads: 'Open-request state: action, information, hand-off, none', dec: 'Is an obligation still open at a leaving turn?', does: 'Shows the open item once. Ending is still the model’s decision',
@@ -366,7 +366,7 @@
       { t: 'Long dialogs keep their facts', catch: 'After long tool outputs the model forgets a value it read early on.',
         reads: 'Declared retrieval outputs and the context window size', dec: 'Which record values do later turns still reference?', does: 'Keeps those values in view and folds the rest when the window fills',
         ex: ['<span class="c"># 40 turns later, context near its limit</span>', 'kept:   account_id, balance, posted_at (still referenced)', 'folded: 3 long search outputs → one-line summaries'] },
-      { t: 'The relevant rule arrives on time', catch: 'The agent does not realise a rule applies to the action it just took.',
+      { t: 'The relevant rule arrives on time', catch: 'The agent does not realize a rule applies to the action it just took.',
         reads: 'Which tool just ran', dec: 'Is there a policy sentence declared for this tool?', does: 'Places that sentence, verbatim, right after the tool output',
         ex: ['get_transactions(…) <span class="p">→ records</span>', '<span class="c"># appended after the tool output</span>', 'policy: "…" (the sentence declared for this tool)'] },
     ],
@@ -453,7 +453,7 @@
           fill: on ? C.accentSoft : '#fff', stroke: on ? C.accent : C.line, 'stroke-width': on ? 2 : 1.3 }, g);
         el('path', { d: `M 204 ${y} v 26 h 26`, fill: 'none', stroke: on ? C.accent : C.line, 'stroke-width': on ? 2 : 1.3 }, g);
         el('text', { x: 32, y: y + 30, 'font-size': 15, 'font-weight': 700, fill: on ? C.accent : C.ink }, g, T.files[i]);
-        el('text', { x: 32, y: y + 50, 'font-size': 11, fill: C.muted, class: 'mono' }, g, ['a2/banking_knowledge.lb.json', 'sop_lb/templates/library.json', 'a2/airline.lb.json'][i]);
+        el('text', { x: 32, y: y + 50, 'font-size': 11, fill: C.muted, class: 'mono' }, g, ['banking_knowledge.json', 'library.json', 'airline.json'][i]);
         g.addEventListener('click', () => { cur = i; draw(); });
         if (on) {
           const p = el('path', { d: `M 232 ${y + 35} C 276 ${y + 35}, 280 135, 328 135`, fill: 'none', stroke: C.accent, 'stroke-width': 2.5 }, s);
@@ -584,12 +584,11 @@
     if (nar) return;
     lab(28, 22.25, 'GPT-4o-mini · Qwen2.5-32B', 14, -12, 'start', C.accent, true);
     lab(56.5, 14.5, 'GPT-5.2', 12, 20, 'start', C.accent);
-    lab(82.5, 1, 'Qwen3.8-27B', 0, -16, 'middle', C.accent);
     const s27 = tMode === 'corr' ? [69.3, 16.7] : [56.8, 15.2];
     lab(s27[0], s27[1], 'Qwen3.8-27B (library)', -12, -14, 'end', C.accent);
     lab(37.6, 10.6, 'Qwen3-8B · 14B', 14, 4, 'start', C.accent);
     lab(24.2, 10.6, 'Qwen2.5-32B (library)', -4, 26, 'start', C.accent);
-    lab(66, -1.2, 'τ² retail · 4', 0, 22, 'middle', C.muted, true);
+    lab(66, -1.2, 'τ² retail · 3', 0, 22, 'middle', C.muted, true);
     el('text', { x: x(89), y: y(23.5), 'font-size': 12.5, fill: C.muted, 'text-anchor': 'end' }, s, T.airNote);
     el('text', { x: x(89), y: y(21.5), 'font-size': 12.5, fill: C.muted, 'text-anchor': 'end' }, s, T.retNote);
   }
