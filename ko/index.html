@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이근호</title>
+<meta name="description" content="이근호 — LLM 에이전트 하네스, 모델 튜닝, 서빙을 연구·개발하는 인공지능 연구개발자이자 머신러닝 엔지니어. 시스템 소프트웨어 29년, 그중 최근 10년은 머신러닝·LLM 플랫폼.">
+<link rel="canonical" href="https://beingrelative.github.io/ko/">
+<link rel="alternate" hreflang="en" href="https://beingrelative.github.io/">
+<link rel="alternate" hreflang="ko" href="https://beingrelative.github.io/ko/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="이근호">
+<meta property="og:description" content="인공지능 연구개발자 · LLM 에이전트 하네스, 모델 튜닝(SFT·DPO·RLVR), 서빙">
+<meta property="og:url" content="https://beingrelative.github.io/ko/">
+<link rel="icon" href="../policy-harness/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="topbar" aria-label="언어"><a href="../" hreflang="en">English</a><span aria-current="page">한국어</span></nav>
+
+<header class="hero">
+  <h1 class="name">이근호 <small>Geunho Lee</small></h1>
+  <p class="role">인공지능 연구개발자 · 머신러닝 엔지니어</p>
+  <p class="tagline">LLM 에이전트 하네스(결정론 정책 층, 격리 서브호출, 궤적 포렌식), 모델 튜닝(SFT·DPO·RLVR), 서빙을 연구하고 만듭니다. 시스템 소프트웨어 29년, 그중 최근 10년은 머신러닝·LLM 플랫폼을 맡았습니다.</p>
+  <div class="links">
+    <a href="mailto:thisherenow@hotmail.com">이메일</a>
+    <a href="LINKEDIN_URL">LinkedIn</a>
+    <a href="../policy-harness/ko/">Policy Harness (연구)</a>
+    <a href="https://patents.google.com/patent/KR102835457B1/ko">특허 KR 10-2835457</a>
+  </div>
+</header>
+
+<section id="about">
+  <h2>소개</h2>
+  <p>LLM 에이전트를 만들고, 그 에이전트를 믿고 쓸 수 있게 하는 층을 만듭니다. 2026년에는 에이전트가 제안한 도구 호출을 실행 직전에 검사하는 정책 층을 설계했습니다. 대화 기록만으로 참·거짓이 정해지는 조건만 검사합니다. 추가 학습 없이 오픈 27B 모델을 τ³-bench banking 공개 1위보다 높게 올렸고, 선언 파일 하나만 바꿔 다른 벤치마크로 옮겼습니다.</p>
+  <p>그 전에는 넷스루에서 금융권 행동 데이터 예측·추천 플랫폼과 우리은행 마케팅 분석 에이전트 PoC를 설계·구현했고, 은행장 시연까지 했습니다. 더 앞서서는 인공지능 개발본부장으로 POSTECH·KAIST·서울아산병원과의 산학 공동연구와 국책과제를 이끌었고, 15년 동안 휴대전화·셋톱박스·네트워크 장비 소프트웨어 개발을 총괄했습니다.</p>
+</section>
+
+<section id="highlights">
+  <h2>주요 성과</h2>
+  <div class="feature">
+    <h3>Policy Harness — LLM 에이전트를 위한 결정론 정책 층</h3>
+    <div class="sub">독립 연구, 2026 · 특허 2건 출원</div>
+    <p>모델이 제안한 호출과 실제 도구 사이에 놓이는 층입니다. 대화 기록으로 판정되는 조건만 막습니다. 필요한 조회를 했는지, 값이 도구 출력이나 고객 말에 실제로 있는지, 계산이 기록과 맞는지 같은 것입니다. 걸리면 호출을 실행하지 않고, 확인되지 않은 사실과 정책 문장을 돌려줘 모델이 다시 판단하게 합니다. 같은 입력에는 같은 판정이 나오고 감사 로그가 남습니다.</p>
+    <div class="stats">
+      <div class="stat"><b>49.5 → 57.2</b><span>τ³-bench banking pass^1, Qwen3.8-27B, 97과제 × 4회 (공개 1위 55.2)</span></div>
+      <div class="stat"><b>56.8 → 72.0</b><span>SOPBench library, 공식 채점기, 엔진 수정 없음</span></div>
+      <div class="stat"><b>31.2 → 52.5</b><span>τ² airline 처음 보는 과제, GPT-4o-mini, 올바른 행동을 막은 경우 0건</span></div>
+    </div>
+    <a class="more" href="../policy-harness/ko/">프로젝트 페이지 보기 →</a>
+  </div>
+  <div class="feature">
+    <h3>행동기반 마케팅 에이전트 PoC — 우리은행 (넷스루)</h3>
+    <p>웹·앱 행동 데이터로 대화만으로 마케팅을 분석합니다. 자연어 → SQL(ClickHouse) → 인사이트 → 생성형 보고서 → CEP 규칙 등록까지 이어집니다. LangGraph 오케스트레이터와 Pydantic AI 에이전트, 동적 계획과 DAG 병렬 실행·재계획, Neo4j 온톨로지·시멘틱 층, 하이브리드 검색(BM25 + 벡터 + 지식 그래프, RRF 융합)으로 만들었습니다. 온프레미스 vLLM으로 서빙하면서 동시 사용자 수를 KV 캐시 용량으로 산정했습니다.</p>
+  </div>
+</section>
+
+<section id="experience">
+  <h2>경력</h2>
+
+  <div class="job"><div class="when">2026.05 – 현재</div><div class="what"><b>독립 연구자</b> <span class="org">· LLM 에이전트 정책 층</span>
+    <ul>
+      <li>도구 사용 LLM 에이전트의 결정론 정책 준수 층(레버 7개) 설계·구현. 결과는 위와 <a href="../policy-harness/ko/">프로젝트 페이지</a>에 있습니다.</li>
+      <li>모델 6종·벤치마크 3종 전이 실측, 레버별 절제, 처음 보는 과제 검증. 공개 벤치마크의 채점기·사용자 시뮬레이터 결함 발견·정량.</li>
+      <li>온프레미스와 클라우드 GPU의 vLLM 다중 인스턴스 운영. 특허 2건 출원.</li>
+    </ul></div></div>
+
+  <div class="job"><div class="when">2023.03 – 2026.04</div><div class="what"><b>이사</b> <span class="org">· (주)넷스루</span>
+    <ul>
+      <li>MAiS: 금융권 웹로그 행동 데이터 기반 재방문·전환 예측과 상품 추천 (LightGBM 등 앙상블, RecBole 기반 Session-based·Session-aware 추천 모델 자체 개발).</li>
+      <li>우리은행 행동기반 마케팅 에이전트 PoC (주요 성과 참고). 프롬프트·템플릿·모델 비교 관리 도구 구축 (Node/TypeScript + React).</li>
+      <li>LLM 파인튜닝(SFT·DPO·RLVR). 로그 데이터 분석 방법 특허 등록(KR 10-2835457).</li>
+    </ul></div></div>
+
+  <div class="job"><div class="when">2021.06 – 2023.02</div><div class="what"><b>이사</b> <span class="org">· 한국정보공학(주)</span>
+    <ul><li>같은 상품을 여러 쇼핑몰에 자동 등록하기 위한 카테고리 분류 인공지능 플랫폼. 온톨로지와 머신러닝을 결합해 설계·구현.</li></ul></div></div>
+
+  <div class="job"><div class="when">2017.02 – 2021.01</div><div class="what"><b>이사 · 인공지능 개발본부장</b> <span class="org">· 모비스(주)</span>
+    <ul>
+      <li>머신러닝팀·블록체인팀 총괄. 산업부 ATC 사업 총괄책임자, 알키미스트 과제 수행기관 책임자.</li>
+      <li>산학 공동연구: 가속기 파라미터 최적화(POSTECH), 핵융합 파라미터 최적화(KAIST), 유전자 편집을 위한 유전자 패턴 학습(서울아산병원).</li>
+      <li>머신러닝 기반 금융 프로젝트, ML 플랫폼 설계·구축.</li>
+    </ul></div></div>
+
+  <div class="job"><div class="when">2015.04 – 2017.02</div><div class="what"><b>상무보 · SW연구소 부소장</b> <span class="org">· (주)다산네트웍솔루션즈</span>
+    <ul><li>Agile 기반 소프트웨어 품질 향상과 개발 프로세스 개선. 일본 사업 기술 담당으로 소프트뱅크·KDDI 납품 네트워크 장비 소프트웨어 품질 총괄.</li></ul></div></div>
+
+  <div class="job"><div class="when">2011.07 – 2015.04</div><div class="what"><b>상무보 · 단말연구소 실장</b> <span class="org">· (주)다산네트웍스</span>
+    <ul><li>SK브로드밴드 납품 셋톱박스 기획·개발·관리, 주요 시스템 기능 직접 구현.</li></ul></div></div>
+
+  <div class="job"><div class="when">2006.08 – 2011.06</div><div class="what"><b>수석연구원</b> <span class="org">· 유니챌(주)</span>
+    <ul><li>LG 모바일 사업부 협력사로서 LG 피처폰·스마트폰 응용과 시스템 개발 총괄. 일본향·미주향 신규 네트워크 프로토콜 설계·구현.</li></ul></div></div>
+
+  <div class="job"><div class="when">2005.11 – 2006.04</div><div class="what"><b>수석연구원 · 상해 연구소장</b> <span class="org">· (주)자강</span>
+    <ul><li>중국향 CDMA 휴대전화 개발.</li></ul></div></div>
+
+  <div class="job"><div class="when">2003.02 – 2005.11</div><div class="what"><b>책임연구원 · 개발 팀장</b> <span class="org">· (주)스마트모바일</span>
+    <ul><li>중국향 휴대전화 시스템·UI 개발.</li></ul></div></div>
+
+  <div class="job"><div class="when">2002.03 – 2003.01</div><div class="what"><b>책임연구원</b> <span class="org">· (주)신지소프트</span>
+    <ul><li>중국향 휴대전화 UI 개발.</li></ul></div></div>
+
+  <div class="job"><div class="when">2001.06 – 2002.01</div><div class="what"><b>연구원</b> <span class="org">· (주)솔본(새롬기술)</span>
+    <ul><li>VoIP 서비스 통화품질 개선 알고리즘 개발.</li></ul></div></div>
+
+  <div class="job"><div class="when">1997.10 – 2001.06</div><div class="what"><b>주임연구원</b> <span class="org">· (주)LG데이콤 CTI 팀</span>
+    <ul><li>국내 최초 ARS 콜렉트콜 서비스 기획·개발 (데이콤 사장상).</li></ul></div></div>
+</section>
+
+<section id="patents">
+  <h2>특허</h2>
+  <ul class="plain">
+    <li><a href="https://patents.google.com/patent/KR102835457B1/ko">로그 데이터를 분석하기 위한 방법</a> — KR 10-2835457, 2025-07-18 등록 (발명자, 출원인 (주)넷스루).</li>
+    <li>LLM 에이전트 정책 층 관련 특허 2건 출원 (2026, 공개 전까지 세부 내용 비공개).</li>
+  </ul>
+</section>
+
+<section id="education">
+  <h2>학력</h2>
+  <ul class="plain">
+    <li><b>KAIST</b> — 전산학 석사</li>
+    <li><b>POSTECH</b> — 전산학(컴퓨터공학) 학사</li>
+  </ul>
+</section>
+
+<section id="skills">
+  <h2>기술</h2>
+  <div class="skill-row"><div class="k">LLM 에이전트</div><div class="chips"><span>도구 호출 하네스</span><span>결정론 정책 층</span><span>LangGraph</span><span>Pydantic AI</span><span>Plan-and-Execute · DAG</span><span>NL→SQL</span><span>궤적 포렌식</span><span>τ-bench · SOPBench 평가</span></div></div>
+  <div class="skill-row"><div class="k">지식 · RAG</div><div class="chips"><span>온톨로지 설계</span><span>Neo4j</span><span>시멘틱 층</span><span>하이브리드 검색 (BM25 · 벡터 · KG · RRF)</span><span>Modular RAG</span></div></div>
+  <div class="skill-row"><div class="k">학습</div><div class="chips"><span>SFT</span><span>DPO</span><span>RLVR</span><span>LoRA</span><span>PyTorch</span></div></div>
+  <div class="skill-row"><div class="k">서빙 · 인프라</div><div class="chips"><span>vLLM (온프레미스·클라우드 GPU)</span><span>KV 캐시 용량 설계</span><span>Docker</span><span>ClickHouse</span><span>Python</span><span>TypeScript / React</span></div></div>
+  <div class="skill-row"><div class="k">ML 플랫폼</div><div class="chips"><span>예측 (LightGBM 앙상블)</span><span>추천 (RecBole)</span><span>ML 플랫폼 설계</span></div></div>
+  <div class="skill-row"><div class="k">리더십</div><div class="chips"><span>인공지능 개발본부장</span><span>산학 공동연구</span><span>국책과제 총괄</span><span>Agile SW 품질</span><span>일본·중국 현지 사업</span></div></div>
+</section>
+
+<footer>© 2026 이근호 · <a href="../">English</a></footer>
+</div>
+</body>
+</html>

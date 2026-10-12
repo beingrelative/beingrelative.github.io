@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policy Harness</title>
+<meta name="description" content="A deterministic policy layer that checks every tool call an LLM agent proposes, before it runs. With no extra training, an open 27B model passes the top public entry on τ³-bench banking.">
+<link rel="canonical" href="https://beingrelative.github.io/policy-harness/">
+<link rel="alternate" hreflang="en" href="https://beingrelative.github.io/policy-harness/">
+<link rel="alternate" hreflang="ko" href="https://beingrelative.github.io/policy-harness/ko/">
+<link rel="alternate" hreflang="x-default" href="https://beingrelative.github.io/policy-harness/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Policy Harness">
+<meta property="og:description" content="A deterministic policy layer that checks every tool call an LLM agent proposes, before it runs. With no extra training, an open 27B model passes the top public entry on τ³-bench banking.">
+<meta property="og:url" content="https://beingrelative.github.io/policy-harness/">
+<meta property="og:image" content="https://beingrelative.github.io/policy-harness/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="p1" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#3ddc84"/><rect x="1" y="2" width="1" height="1" fill="#3ddc84"/><rect x="2" y="2" width="1" height="1" fill="#3ddc84"/><rect x="1" y="3" width="1" height="1" fill="#3ddc84"/><rect x="1" y="4" width="1" height="1" fill="#3ddc84"/><rect x="2" y="4" width="1" height="1" fill="#3ddc84"/><rect x="3" y="4" width="1" height="1" fill="#3ddc84"/></symbol><symbol id="p2" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#3b82f6"/><rect x="2" y="1" width="1" height="1" fill="#3b82f6"/><rect x="1" y="2" width="1" height="1" fill="#3b82f6"/><rect x="1" y="3" width="1" height="1" fill="#3b82f6"/><rect x="4" y="3" width="1" height="1" fill="#3b82f6"/><rect x="3" y="4" width="1" height="1" fill="#3b82f6"/><rect x="4" y="4" width="1" height="1" fill="#3b82f6"/></symbol><symbol id="p3" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="2" y="1" width="1" height="1" fill="#facc15"/><rect x="3" y="1" width="1" height="1" fill="#facc15"/><rect x="1" y="2" width="1" height="1" fill="#facc15"/><rect x="4" y="2" width="1" height="1" fill="#facc15"/><rect x="4" y="3" width="1" height="1" fill="#facc15"/><rect x="3" y="4" width="1" height="1" fill="#facc15"/></symbol><symbol id="p4" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#d600d6"/><rect x="4" y="1" width="1" height="1" fill="#d600d6"/><rect x="2" y="2" width="1" height="1" fill="#d600d6"/><rect x="3" y="2" width="1" height="1" fill="#d600d6"/><rect x="2" y="3" width="1" height="1" fill="#d600d6"/><rect x="3" y="3" width="1" height="1" fill="#d600d6"/><rect x="1" y="4" width="1" height="1" fill="#d600d6"/><rect x="4" y="4" width="1" height="1" fill="#d600d6"/></symbol><symbol id="p5" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#ffffff"/><rect x="2" y="1" width="1" height="1" fill="#ffffff"/><rect x="3" y="1" width="1" height="1" fill="#ffffff"/><rect x="4" y="1" width="1" height="1" fill="#ffffff"/><rect x="1" y="3" width="1" height="1" fill="#ffffff"/><rect x="2" y="3" width="1" height="1" fill="#ffffff"/><rect x="1" y="5" width="1" height="1" fill="#ffffff"/><rect x="2" y="5" width="1" height="1" fill="#ffffff"/><rect x="3" y="5" width="1" height="1" fill="#ffffff"/></symbol><symbol id="p6" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#3ddc84"/><rect x="4" y="1" width="1" height="1" fill="#3b82f6"/><rect x="1" y="2" width="1" height="1" fill="#3ddc84"/><rect x="4" y="2" width="1" height="1" fill="#3b82f6"/><rect x="1" y="3" width="1" height="1" fill="#3ddc84"/><rect x="2" y="3" width="1" height="1" fill="#3ddc84"/><rect x="3" y="3" width="1" height="1" fill="#3b82f6"/><rect x="4" y="3" width="1" height="1" fill="#3b82f6"/></symbol><symbol id="p7" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="4" y="1" width="1" height="1" fill="#facc15"/><rect x="3" y="2" width="1" height="1" fill="#facc15"/><rect x="4" y="2" width="1" height="1" fill="#facc15"/><rect x="2" y="3" width="1" height="1" fill="#facc15"/><rect x="3" y="3" width="1" height="1" fill="#facc15"/><rect x="4" y="3" width="1" height="1" fill="#facc15"/><rect x="1" y="4" width="1" height="1" fill="#facc15"/><rect x="2" y="4" width="1" height="1" fill="#facc15"/><rect x="3" y="4" width="1" height="1" fill="#facc15"/><rect x="4" y="4" width="1" height="1" fill="#facc15"/></symbol><symbol id="p8" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#e5372a"/><rect x="4" y="1" width="1" height="1" fill="#e5372a"/><rect x="2" y="2" width="1" height="1" fill="#e5372a"/><rect x="3" y="2" width="1" height="1" fill="#e5372a"/><rect x="2" y="3" width="1" height="1" fill="#e5372a"/><rect x="3" y="3" width="1" height="1" fill="#e5372a"/><rect x="1" y="4" width="1" height="1" fill="#e5372a"/><rect x="4" y="4" width="1" height="1" fill="#e5372a"/></symbol><symbol id="p9" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#d600d6"/><rect x="2" y="1" width="1" height="1" fill="#d600d6"/><rect x="3" y="1" width="1" height="1" fill="#d600d6"/><rect x="1" y="2" width="1" height="1" fill="#d600d6"/><rect x="3" y="2" width="1" height="1" fill="#d600d6"/><rect x="1" y="3" width="1" height="1" fill="#d600d6"/><rect x="2" y="3" width="1" height="1" fill="#d600d6"/><rect x="3" y="3" width="1" height="1" fill="#d600d6"/><rect x="1" y="4" width="1" height="1" fill="#d600d6"/></symbol><symbol id="pc" viewBox="0 0 6 6"><rect width="6" height="6" fill="#111"/><rect x="1" y="1" width="1" height="1" fill="#d600d6"/><rect x="1" y="2" width="1" height="1" fill="#d600d6"/><rect x="2" y="2" width="1" height="1" fill="#d600d6"/><rect x="1" y="3" width="1" height="1" fill="#d600d6"/><rect x="2" y="3" width="1" height="1" fill="#d600d6"/><rect x="3" y="3" width="1" height="1" fill="#d600d6"/><rect x="1" y="4" width="1" height="1" fill="#d600d6"/><rect x="2" y="4" width="1" height="1" fill="#d600d6"/><rect x="1" y="5" width="1" height="1" fill="#d600d6"/></symbol><symbol id="g-user" viewBox="0 0 64 64"><circle cx="32" cy="22" r="11" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3"/><path d="M12 56c2-11 10-17 20-17s18 6 20 17" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>  <symbol id="g-model" viewBox="0 0 64 64"><path d="M14 9h36a8 8 0 0 1 8 8v19a8 8 0 0 1-8 8H27l-11 10v-10h-2a8 8 0 0 1-8-8V17a8 8 0 0 1 8-8z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="21" cy="27" r="3" fill="currentColor"/><circle cx="32" cy="27" r="3" fill="currentColor"/><circle cx="43" cy="27" r="3" fill="currentColor"/></symbol>  <symbol id="g-gate" viewBox="0 0 64 64"><rect x="6" y="5" width="10" height="54" rx="3" fill="currentColor"/><rect x="48" y="5" width="10" height="54" rx="3" fill="currentColor"/><path d="M16 12h32M16 19.5h32M16 27h32M16 34.5h32M16 42h32M16 49.5h32M16 57h32" stroke="currentColor" stroke-width="3" stroke-opacity=".55"/></symbol>  <symbol id="g-tool" viewBox="0 0 64 64"><path d="M10 14v36c0 4.4 9.8 8 22 8s22-3.6 22-8V14" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3"/><ellipse cx="32" cy="14" rx="22" ry="8" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="3"/><path d="M10 32c0 4.4 9.8 8 22 8s22-3.6 22-8" fill="none" stroke="currentColor" stroke-width="3" stroke-opacity=".6"/></symbol>  <symbol id="g-doc" viewBox="0 0 64 64"><path d="M14 5h25l13 13v41H14z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M39 5v13h13" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M21 30h24M21 38h24M21 46h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>  <symbol id="g-slip" viewBox="0 0 64 64"><path d="M10 6h44v46l-5.5-5-5.5 5-5.5-5-5.5 5-5.5-5-5.5 5-5.5-5-5.5 5z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M19 17h26M19 25h26M19 33h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>  <symbol id="g-log" viewBox="0 0 64 64"><rect x="11" y="6" width="42" height="52" rx="5" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="3"/><path d="M19 19l3 3 5-6M31 19h14M19 31l3 3 5-6M31 31h14M19 43l3 3 5-6M31 43h14" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+
+<div class="topbar"><span><a href="../" style="color:inherit;text-decoration:none">&larr; Geunho Lee</a></span><nav class="lang" aria-label="Language"><span>English</span><a href="ko/" hreflang="ko">한국어</a></nav></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="kicker">τ³-bench · SOPBench · τ²-bench</p>
+      <h1 class="hero-title"><span class="br">[</span>policy harness<span class="br">]</span></h1>
+      <p class="hero-claim">An open 27B model, no extra training:<br><em>57.2</em> on τ³-bench banking, above the board leader</p>
+      <p class="hero-tag"><b>Policy Harness</b> checks each tool call an LLM agent proposes, just before it runs. It only checks conditions the transcript settles on its own; a call that breaks one does not run, and the model gets back the fact and the policy sentence.</p>
+      <nav class="hero-nav" aria-label="contents"><a href="#result">Result</a><a href="#problem">Problem</a><a href="#idea">Idea</a><a href="#how">Mechanism</a><a href="#levers">Levers</a><a href="#declaration">New domains</a><a href="#numbers">Numbers</a><a href="#limits">Limits</a><a href="#measure">Method</a></nav>
+      <p class="hero-meta">October 4, 2026</p>
+      <p class="hero-key">LLM agent → <b>policy layer</b> → a passing call runs; a violation sends the fact and the policy sentence back to the model.</p>
+    </div>
+    <div id="hero-anim" class="hero-anim" role="img" aria-label="Calls pass through the policy layer to the tool, or are denied back to the model" data-model="LLM agent" data-model-sub="proposes a call" data-layer="policy layer" data-layer-sub="closed checks only" data-pass="PASS → tool runs" data-deny="DENY → fact + policy" data-again="the model decides again"></div>
+  </div>
+</header>
+
+<main class="post">
+
+<section class="sec" id="result">
+  <h2><svg class="px" aria-hidden="true"><use href="#p1"/></svg>τ³-bench banking: knowing the rules and keeping them</h2>
+  <p>The <code>banking_knowledge</code> domain of τ³-bench is 97 tasks for a bank support agent. Each task runs four times, and the board reports two rates.</p>
+  <figure class="fig fig-narrow bench" id="bench">
+    <div class="bm-flow"><div class="bm-s"><svg><use href="#g-doc"/></svg><p><b>Search documents</b>reads the knowledge base</p></div><i class="arr"></i><div class="bm-s"><svg><use href="#g-user"/></svg><p><b>Talk to the customer</b>looks up accounts</p></div><i class="arr"></i><div class="bm-s"><svg><use href="#g-tool"/></svg><p><b>Write tools</b>change records: close a card, file a dispute</p></div></div>
+    <div class="bm-k"><p class="bm-n">97 tasks × 4 runs</p>
+      <p><span class="dots"><i class="on"></i><i></i><i></i><i></i></span><b>pass^1</b> share solved once</p>
+      <p><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><b>pass^4</b> share solved in all four runs</p></div>
+  </figure>
+  <p><b>Policy Harness</b> leaves the weights, tools and policy documents alone and puts one checking step between the model's call and the real tool.</p>
+  <figure class="fig fig-narrow" id="fig1">
+    <p class="fig-title">One layer lifts the same model past the board leader</p>
+    <div id="f1"></div>
+    <div class="stats" id="f1stats"></div>
+    <figcaption><b>Figure 1.</b> pass^1 to pass^4 for the same Qwen3.8-27B without the layer (grey) and with Policy Harness (indigo), 97 tasks × 4. The hollow ring is the top public entry (Qwen3.8 Max). All runs use gpt-5.2 as the user simulator; the no-layer pass^4 is undefined because one simulation ended in an infrastructure error. The rules were written on these 97 tasks (<a href="#measure">Method 5</a>); results on unseen tasks are in Figure 9.</figcaption>
+  </figure>
+</section>
+
+<section class="sec" id="problem">
+  <h2><svg class="px" aria-hidden="true"><use href="#p2"/></svg>Slips at the moment of writing</h2>
+  <p>We drew 32 of the 27B model's 196 banking failures at random and read each conversation to the end.</p>
+  <figure class="fig fig-narrow slips" id="slips">
+    <div class="gr-row"><p class="gr-l">The needed document was already in the search results</p><div class="cells"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div><p class="gr-n"><b>30</b> / 32</p></div>
+    <div class="gr-row"><p class="gr-l">The slip was the model's own</p><div class="cells deny"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="gr-n"><b>14</b> / 32 (44%)</p></div>
+    <ul class="gr-types"><li>writing before the required lookup</li><li>doing arithmetic in its head and getting it wrong</li><li>putting a value no tool output contains into an argument</li></ul>
+    <figcaption>32 of the 27B model's 196 banking failures, drawn at random. One cell is one failure.</figcaption>
+  </figure>
+  <p>Missing knowledge was not the problem. Only one argument is wrong, so the slip is hard to see in the conversation. But once something is written to a record it cannot be taken back.</p>
+  <figure class="fig fig-narrow" id="fig2">
+    <div class="fig-head"><p class="fig-title">Trust the customer, or trust the record?</p><div class="seg" id="caseTog"><button data-v="off" class="on">WITHOUT LAYER</button><button data-v="on">WITH LAYER</button></div></div>
+    <div class="seq" id="lanes">
+      <div class="seq-heads"><div class="sh"><span>Customer</span></div><div class="sh"><span>Model</span></div><div class="sh L"><span>Policy layer</span></div><div class="sh"><span>Tool · record</span></div></div>
+      <div class="seq-body">
+      <div class="sr"><div class="msg r" style="grid-column:1 / 3"><span class="n">1</span>I need to cancel my reservation. I booked it about 10 hours ago.</div></div>
+      <div class="sr"><div class="msg r" style="grid-column:2 / 5"><span class="n">2</span><code>get_reservation_details</code></div></div>
+      <div class="sr"><div class="msg l" style="grid-column:2 / 5"><span class="n">3</span>record <code>created_at 2024-05-02</code> · policy clock <code>05-15</code></div></div>
+      <div class="sr"><div class="msg r to-layer" style="grid-column:2 / 5"><span class="n">4</span><code>cancel_reservation(…)</code> <span class="why">takes the customer's word</span></div></div>
+      <div class="sr off-only"><div class="snote bad" style="grid-column:4 / 5">executed<br>reservation cancelled</div></div>
+      <div class="sr on-only"><div class="slip" style="grid-column:3 / 4"><p class="slip-h">Deny · not executed</p><p class="slip-x">Booked within 24 h?<br>record <span class="nw">05-02</span> · policy clock <span class="nw">05-15</span></p><p>① the unexecuted call <code>cancel_reservation</code></p><p>② the fact from the record <code>created_at 2024-05-02</code></p><p>③ the policy's cancellation sentence, verbatim</p></div><div class="snote" style="grid-column:4 / 5">not executed<br>record unchanged</div></div>
+      <div class="sr on-only"><div class="msg l deny" style="grid-column:2 / 4"><span class="n">5</span>refusal (no value, no next step)</div></div>
+      <div class="sr on-only"><div class="msg l" style="grid-column:1 / 3"><span class="n">6</span>The record shows May 2, so it is past 24 hours and I can't cancel on that basis. Let me check the other conditions.</div></div>
+      </div>
+      <div class="res bad off-only">Outcome · cancellation executed, task failed</div>
+      <div class="res good on-only">Outcome · not cancelled, record unchanged</div>
+      <div class="artifact on-only"><p class="art-h">Recorded refusal · same rule, τ² airline task 43 (excerpt)</p><blockquote>…The reservation record read in this conversation shows created_at 2024-05-04T07:38:29 (current time stated in the policy: 2024-05-15 15:00:00), cabin basic_economy, insurance no; flight status reads in this conversation showing a segment of it cancelled: 0. …</blockquote><p class="note">The only values in it are facts read from records in this conversation. The policy quotation is omitted from this excerpt.</p></div>
+    </div>
+    <figcaption><b>Figure 2.</b> One turn of τ²-bench airline task 48. Without the layer, the model trusts the customer's "10 hours ago" and cancels. With the layer, the cancellation does not run and the model gets back the booking date from the record and the policy sentence. IDs are removed, the record and refusal are abridged, and reply 6 is illustrative. The policy clock is the current time stated in the policy document.</figcaption>
+  </figure>
+</section>
+
+<section class="sec" id="idea">
+  <h2><svg class="px" aria-hidden="true"><use href="#p3"/></svg>Only what the record can settle</h2>
+  <p>Some policy conditions are settled by the transcript alone. We call these closed, and the ones that need a reader's judgment open. The layer blocks only on closed conditions and leaves open ones to the model.</p>
+  <figure class="fig fig-narrow" id="fig3">
+    <p class="fig-title">If the answer is in the record, the layer decides</p>
+    <div class="twocol">
+        <div class="col closed"><p class="col-h">CLOSED · blocked before it runs</p><p class="col-s">The answer is fixed by events, record fields and strings in the transcript.</p><ul><li><small>event</small>Was the reservation read before <code>cancel</code>?</li><li><small>record</small>Is <code>created_at</code> within 24 h of the policy clock?</li><li><small>string</small>Does the ZIP code being written appear in a tool output or customer message?</li><li><small>arithmetic</small>Does the refund equal the value computed from the fetched records?</li></ul></div>
+        <div class="col open"><p class="col-h">OPEN · left to the model</p><p class="col-s">The layer may show the relevant policy sentence, but it never blocks on these.</p><ul><li><small>intent</small>Does the customer really want to close the account?</li><li><small>tone</small>Is this a complaint to escalate?</li><li><small>fit</small>Which of three products fits what they described?</li><li><small>meaning</small>Is "a few days ago" inside the window?</li></ul></div>
+    </div>
+    <figcaption><b>Figure 3.</b> Examples of closed and open conditions. The layer checks the left column before a call runs and leaves the right column to the model's judgment.</figcaption>
+  </figure>
+  <div class="callout"><svg class="px" aria-hidden="true"><use href="#pc"/></svg><p><b>Core idea.</b> A check that needs interpretation would need another model, and that model makes mistakes too. If the layer blocks only what the record settles, every refusal is explained by one fact the agent can see for itself.</p></div>
+</section>
+
+<section class="sec dark" id="how">
+  <h2><svg class="px" aria-hidden="true"><use href="#p4"/></svg>What happens inside one turn</h2>
+  <p>This is the path one call takes from the model to the real tool.</p>
+  <div class="scrolly">
+    <div class="scrolly-steps">
+      <div class="step" data-s="1"><span class="step-n">1 · Propose</span><p>The model reads the conversation and produces its next turn. Whether that is a tool call or a message to the customer, nothing has run yet.</p></div>
+      <div class="step" data-s="2"><span class="step-n">2 · Read</span><p>The engine loads the domain's declaration file and the transcript so far: which tools returned what, and what the customer said.</p></div>
+      <div class="step" data-s="3"><span class="step-n">3 · Check</span><p>Seven levers each test the closed conditions they own. Most stay silent; a lever that finds a violation reports one unconfirmed fact.</p></div>
+      <div class="step" data-s="4"><span class="step-n">4a · Pass</span><p>If nothing is flagged, the call goes to the tool with its arguments unchanged. The layer never rewrites a value.</p></div>
+      <div class="step" data-s="5"><span class="step-n">4b · Deny</span><p>If something is flagged, the call does not run. The model gets the call, the unconfirmed fact and the policy sentence, and proposes again, within a fixed number of retries.</p></div>
+      <div class="step" data-s="6"><span class="step-n">5 · Log</span><p>Passes, denials, injected computations and retries go to an audit log together with the tool output each relied on. The same input always gets the same decision.</p></div>
+    </div>
+    <div class="scrolly-fig"><div id="f4"></div><figcaption><b>Figure 4.</b> The path of one call. Scroll through the steps to light each part of the figure.</figcaption></div>
+  </div>
+  <div class="callout"><svg class="px" aria-hidden="true"><use href="#pc"/></svg><p><b>Why the refusal carries no value.</b> If the layer wrote the fix ("cancel with refund 0"), a mistake in a rule would become a mistake in an action. Returning only the fact and the policy sentence leaves the next move with the model.</p></div>
+</section>
+
+<section class="sec" id="levers">
+  <h2><svg class="px" aria-hidden="true"><use href="#p5"/></svg>Seven levers</h2>
+  <p>Each lever names one slip that kept recurring in failed conversations. For every lever the panel shows what it reads and decides, and the score when that lever alone is switched off.</p>
+  <figure class="fig" id="fig5">
+    <p class="fig-title">Reads → decides → does, and what happens without it</p>
+    <div class="lx"><div class="lx-tabs" id="lxTabs"></div><div class="lx-body" id="lxBody"></div></div>
+    <figcaption><b>Figure 5.</b> What each lever reads, decides and does, with an example. The bars are pass^1 on tasks where the full layer fired, with that one lever switched off; the red span is at or below the no-layer score. Examples were written for this page and are not the declaration's rule text.</figcaption>
+  </figure>
+</section>
+
+<section class="sec" id="declaration">
+  <h2><svg class="px" aria-hidden="true"><use href="#p6"/></svg>Moving to another domain</h2>
+  <p>The engine code contains no domain words, no card and no flight. Everything domain-specific goes into one declaration file: which lookup each write needs first, which arguments must have a source, which computations are available, and which policy sentence goes with which tool.</p>
+  <p>Moving the engine built for banking to SOPBench library and τ² airline meant writing that file. Airline needed a few more generic operators, such as the hours between two timestamps, but still no domain words in the engine.</p>
+  <figure class="fig fig-narrow" id="fig6">
+    <p class="fig-title">Swap the file, and the same engine runs a new domain</p>
+    <div id="f6"></div>
+    <figcaption><b>Figure 6.</b> The same engine with only the declaration file swapped (pass^1). For airline we added four operators (<code>hours_between</code> · <code>count_of</code> · <code>prefix</code> · <code>eq</code>) and one operand (<code>now</code>) to the engine (+74 lines); afterwards, banking decisions over 6,197 recorded turns were byte-identical.</figcaption>
+  </figure>
+</section>
+
+<section class="sec" id="numbers">
+  <h2><svg class="px" aria-hidden="true"><use href="#p7"/></svg>What the numbers say</h2>
+  <p>We swapped only the declaration file and ran the same layer on SOPBench library and on τ²-bench airline and retail, across several models.</p>
+  <p><b>The gain tracks how often the model breaks closed rules.</b> On SOPBench library all five models gained 6 to 15 points; on airline, GPT-4o-mini and Qwen2.5-32B, the two with the lowest baselines, gained 22 points or more. Airline with the 27B model, which already follows that policy, and retail, where most failures are judgment calls, barely moved.</p>
+  <figure class="fig fig-narrow" id="fig7">
+    <p class="fig-title">Same layer, other domains and models</p>
+    <div class="fig-head"><div class="ctrls">
+      <div class="seg" id="tView"><button data-v="score" class="on">MODEL SCORES</button><button data-v="gain">GAIN VS BASELINE</button></div>
+      <span class="ctl-l">SOPBench</span><div class="seg" id="sopTog"><button data-v="official" class="on">OFFICIAL</button><button data-v="corr">SCORER FIXED</button></div>
+    </div></div>
+    <p class="fig-legend" id="f7legend"></p>
+    <div id="f7"></div>
+    <figcaption><b>Figure 7.</b> pass^1 by domain and model, without the layer (grey) and with it (indigo). In the second view, x is the no-layer score and y the gain. SOPBench shows the official scorer by default; scorer-fixed values were measured for the 27B model only. SOPBench hotel gains +11.0 under the official scorer and −0.4 once the scorer bug is fixed, so it is left out.</figcaption>
+  </figure>
+  <p><b>Which levers carry the score?</b> In three settings we switched the levers off one at a time and reran. Without the grounding lever (LB3), all three fall to or below the no-layer score. Our reading is that the computed values and policy text the other levers inject get mixed with the model's own guesses once nothing checks where a value came from.</p>
+  <p>The weight of the procedure lever (LB1) depended on how often a model broke ordering. GPT-4o-mini, with 40 calls denied for ordering, lost 9.2 points without LB1; Qwen3-8B, with 10, lost nothing.</p>
+  <figure class="fig" id="fig8">
+    <p class="fig-title">Without grounding (LB3), all three settings fall below the no-layer score</p>
+    <div id="f8"></div>
+    <figcaption><b>Figure 8.</b> Switching one lever off. pass^1 on tasks where the full layer fired (27B banking, 16; GPT-4o-mini airline, 30; Qwen3-8B airline, 24). The red span is at or below the no-layer score; the vertical line is the full layer. LB4 is left out of our claims because switching it off raised the airline score.</figcaption>
+  </figure>
+  <p><b>And on unseen tasks?</b> We split the 50 airline tasks into 30 for writing rules and 20 for testing, and rebuilt the rules from the 30 alone. On the 20 test tasks GPT-4o-mini rose from 31.2 to 52.5, and no correct action was blocked.</p>
+  <figure class="fig fig-narrow" id="fig9">
+    <p class="fig-title">On unseen tasks, and next to another method</p>
+    <div class="rel">
+      <div><p class="rel-h">HELD-OUT · AIRLINE 20 TASKS</p><div id="f9a"></div></div>
+      <div><p class="rel-h">SAME HARNESS · REASON LESS, VERIFY MORE</p><div id="f9b"></div></div>
+    </div>
+    <figcaption><b>Figure 9.</b> Left: the airline held-out test (30 for writing rules / 20 for testing, GPT-4o-mini). Right: pass^1 and pass^4 on the same 50 tasks × 4, without the layer, with the published gates of <a href="https://arxiv.org/abs/2607.07405">Reason Less, Verify More</a> (hollow ring), and with Policy Harness. On fired tasks the gates lost 5 simulations and this layer lost 1.</figcaption>
+  </figure>
+</section>
+
+<section class="sec" id="limits">
+  <h2><svg class="px" aria-hidden="true"><use href="#p8"/></svg>Where it did not help</h2>
+  <p><b>Retail did not move for any of the four models.</b> Most failures were judgment calls about which item or which variant to pick, and many ended because the user simulator closed the conversation early. Few were violations the record could settle.</p>
+  <p><b>Airline with Qwen3.8-27B stayed flat as well.</b> The model already followed that policy, and the layer fired on a single task.</p>
+  <p><b>We do not count SOPBench hotel's +11.0.</b> On 56 of 195 tasks the scorer read an OR condition as AND; fixing it leaves a difference of −0.4.</p>
+  <p>Where the layer did not help, it did not cost much either: 0 to 3 simulations lost out of hundreds, none of them traced to a wrong denial.</p>
+</section>
+
+<section class="sec" id="measure">
+  <h2><svg class="px" aria-hidden="true"><use href="#p9"/></svg>How we measured</h2>
+  <p>What we did to keep the comparison fair, and what could otherwise have been counted as our gain.</p>
+  <details class="ev"><summary><span class="evk">Method 1 · server</span><span class="evt">Both conditions on the same vLLM instance</span><span class="evm">first reply changed on 30 / 66 tasks</span></summary><p>Switching vLLM instances alone changed the first response on 30 of 66 SOPBench tasks and flipped 8.9% of outcomes where the layer never intervened, about the size of a real effect. Every comparison here ran both conditions on one instance.</p></details>
+  <details class="ev"><summary><span class="evk">Method 2 · attribution</span><span class="evt">Gains counted only where the layer intervened</span><span class="evm">silent tasks −0.25 per run</span></summary><p>A gain is credited to the layer only on tasks where it actually denied a call or injected a value. Tasks where it stayed silent show the noise level (SOPBench library: −0.25 tasks per run).</p></details>
+  <details class="ev"><summary><span class="evk">Method 3 · scorer</span><span class="evt">Three bugs in the official SOPBench scorer</span><span class="evm">reproduces 21 official FC models</span></summary><p>The official scorer re-reads recorded calls with <code>eval()</code>, so JSON booleans fail and dates are evaluated as arithmetic; goal actions that return a value always score as failures; on hotel, an OR in the reference graph is folded to AND on 56 of 195 tasks. With our fixes off, the published scores of all 21 official function-calling models come out exactly, and this page reports the official numbers first.</p></details>
+  <details class="ev"><summary><span class="evk">Method 4 · simulator</span><span class="evt">The τ² user simulator ends conversations early</span><span class="evm">32 / 80 audited failures</span></summary><p>In 32 of 80 audited failures the simulator sent "Yes" and the stop signal in the same message, so an agent that follows the policy never gets its turn to act. Every entry that uses this simulator works under the same limit.</p></details>
+  <details class="ev"><summary><span class="evk">Method 5 · disclosure</span><span class="evt">The banking rules were written on the evaluation tasks</span><span class="evm">10 reference-fitted items removed</span></summary><p>The banking rules were developed on the 97 evaluation tasks, looking at rewards and reference solutions. We audited every rule by its source: (A) a quotation of the policy the agent receives, (B) general practice an expert would state without the task, (C) a form chosen because it matched reference solutions. All C items were removed before the submitted run. This result is not test-blind; the unseen-task check is the airline held-out test.</p></details>
+  <details class="ev"><summary><span class="evk">Method 6 · boundary</span><span class="evt">What the layer reads at run time</span><span class="evm">no access to goals or answers</span></summary><p>At run time the layer reads the proposed turn, the tool outputs the agent received, the policy documents the agent receives, and the declaration file. It has no access to task goals, reference actions or evaluator state.</p></details>
+</section>
+
+</main>
+
+<footer class="foot">
+  <p>Every number was checked against the experiment reports.</p>
+  <p class="meta">Policy Harness · 2026-10-04</p>
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

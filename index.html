@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geunho Lee</title>
+<meta name="description" content="Geunho Lee — AI R&D engineer and machine learning engineer working on LLM agent harnesses, model tuning, and serving. 29 years in systems software, the last 10 in ML and LLM platforms.">
+<link rel="canonical" href="https://beingrelative.github.io/">
+<link rel="alternate" hreflang="en" href="https://beingrelative.github.io/">
+<link rel="alternate" hreflang="ko" href="https://beingrelative.github.io/ko/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Geunho Lee">
+<meta property="og:description" content="AI R&D engineer · LLM agent harnesses, model tuning (SFT, DPO, RLVR), and serving.">
+<meta property="og:url" content="https://beingrelative.github.io/">
+<link rel="icon" href="policy-harness/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="topbar" aria-label="Language"><span aria-current="page">English</span><a href="ko/" hreflang="ko">한국어</a></nav>
+
+<header class="hero">
+  <h1 class="name">Geunho Lee <small>이근호</small></h1>
+  <p class="role">AI R&amp;D Engineer · Machine Learning Engineer</p>
+  <p class="tagline">LLM agent harnesses (deterministic policy layers, isolated sub-calls, trajectory forensics), model tuning (SFT, DPO, RLVR), and serving. 29 years in systems software; the last 10 in machine learning and LLM platforms.</p>
+  <div class="links">
+    <a href="mailto:thisherenow@hotmail.com">Email</a>
+    <a href="LINKEDIN_URL">LinkedIn</a>
+    <a href="policy-harness/">Policy Harness (research)</a>
+    <a href="https://patents.google.com/patent/KR102835457B1/en">Patent KR 10-2835457</a>
+  </div>
+</header>
+
+<section id="about">
+  <h2>About</h2>
+  <p>I build LLM agents and the layers that make them dependable. In 2026 I designed a policy layer that checks every tool call an agent proposes just before it runs, using only conditions the conversation record can settle. With no extra training it lifted an open 27B model above the top public entry on τ³-bench banking, and moved to new benchmarks by swapping a single declaration file.</p>
+  <p>Before that, at Nethru, I designed and built a behavior-data prediction and recommendation platform for financial clients and a marketing-analysis agent PoC for Woori Bank, demonstrated to the bank's CEO. Earlier I led an AI development division (industry–academia research with POSTECH, KAIST and Asan Medical Center; national R&amp;D programs) and, for 15 years, mobile, set-top and network-equipment software development.</p>
+</section>
+
+<section id="highlights">
+  <h2>Highlights</h2>
+  <div class="feature">
+    <h3>Policy Harness — a deterministic policy layer for LLM agents</h3>
+    <div class="sub">Independent research, 2026 · two patent applications filed</div>
+    <p>The layer sits between the model's proposed call and the real tool. It blocks only on conditions the transcript settles (a required lookup was done, a value appears in a tool output or the customer's words, a computation matches the record) and returns the unverified fact and the policy sentence so the model decides again. Same input, same verdict, with an audit log.</p>
+    <div class="stats">
+      <div class="stat"><b>49.5 → 57.2</b><span>τ³-bench banking pass^1, Qwen3.8-27B, 97 tasks × 4 (public #1: 55.2)</span></div>
+      <div class="stat"><b>56.8 → 72.0</b><span>SOPBench library, official scorer, engine unchanged</span></div>
+      <div class="stat"><b>31.2 → 52.5</b><span>τ² airline held-out tasks, GPT-4o-mini, 0 correct actions blocked</span></div>
+    </div>
+    <a class="more" href="policy-harness/">Read the project page →</a>
+  </div>
+  <div class="feature">
+    <h3>Behavior-based marketing agent PoC — Woori Bank (Nethru)</h3>
+    <p>Conversational marketing analysis from web/app behavior data: natural language → SQL (ClickHouse) → insights → generated reports → CEP rule registration. LangGraph orchestrator with Pydantic AI agents, dynamic planning with parallel DAG execution and re-planning, a Neo4j ontology and semantic layer, and hybrid retrieval (BM25 + vector + knowledge graph, fused with RRF). Served on on-prem vLLM with KV-cache capacity planning for concurrent users.</p>
+  </div>
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+
+  <div class="job"><div class="when">2026.05 – present</div><div class="what"><b>Independent Researcher</b> <span class="org">· LLM agent policy layer</span>
+    <ul>
+      <li>Deterministic policy-compliance layer (seven levers) for tool-using LLM agents; results above and on the <a href="policy-harness/">project page</a>.</li>
+      <li>Transfer across six models and three benchmarks, per-lever ablations, held-out validation; found and quantified scorer and user-simulator defects in public benchmarks.</li>
+      <li>Multi-instance vLLM operation across on-prem and cloud GPUs; two patent applications filed.</li>
+    </ul></div></div>
+
+  <div class="job"><div class="when">2023.03 – 2026.04</div><div class="what"><b>Director</b> <span class="org">· Nethru Inc.</span>
+    <ul>
+      <li>MAiS: revisit/conversion prediction and product recommendation from web-log behavior data for financial clients (LightGBM ensembles; session-based and session-aware recommenders built on RecBole).</li>
+      <li>Woori Bank behavior-based marketing agent PoC (see Highlights); prompt/template/model comparison tool (Node/TypeScript + React).</li>
+      <li>LLM fine-tuning (SFT, DPO, RLVR); registered patent on log-data analysis (KR 10-2835457).</li>
+    </ul></div></div>
+
+  <div class="job"><div class="when">2021.06 – 2023.02</div><div class="what"><b>Director</b> <span class="org">· Korea Information Engineering</span>
+    <ul><li>AI platform that classifies products into shopping-mall categories for multi-mall listing, combining an ontology with machine learning.</li></ul></div></div>
+
+  <div class="job"><div class="when">2017.02 – 2021.01</div><div class="what"><b>Director, Head of AI Development Division</b> <span class="org">· Mobis Co., Ltd.</span>
+    <ul>
+      <li>Led the machine learning and blockchain teams; principal investigator of a national ATC program and lead of an Alchemist project.</li>
+      <li>Industry–academia research: accelerator parameter optimization (POSTECH), fusion parameter optimization (KAIST), gene-pattern learning for gene editing (Asan Medical Center).</li>
+      <li>ML-based financial projects and ML platform design.</li>
+    </ul></div></div>
+
+  <div class="job"><div class="when">2015.04 – 2017.02</div><div class="what"><b>Associate Vice President, Deputy Head of SW Lab</b> <span class="org">· Dasan Network Solutions</span>
+    <ul><li>Agile-based software quality and process improvement; technical lead for the Japan business, owning software quality for network equipment delivered to SoftBank and KDDI.</li></ul></div></div>
+
+  <div class="job"><div class="when">2011.07 – 2015.04</div><div class="what"><b>Associate Vice President, Head of Device Lab</b> <span class="org">· Dasan Networks</span>
+    <ul><li>Planning, development and management of set-top boxes delivered to SK Broadband; implemented core system functions.</li></ul></div></div>
+
+  <div class="job"><div class="when">2006.08 – 2011.06</div><div class="what"><b>Principal Research Engineer</b> <span class="org">· Unichal</span>
+    <ul><li>Led application and system development for LG feature phones and smartphones as an LG Mobile partner; designed new network protocols for Japan and US models.</li></ul></div></div>
+
+  <div class="job"><div class="when">2005.11 – 2006.04</div><div class="what"><b>Principal Research Engineer, Head of Shanghai R&amp;D Center</b> <span class="org">· Jagang</span>
+    <ul><li>CDMA handset development for China.</li></ul></div></div>
+
+  <div class="job"><div class="when">2003.02 – 2005.11</div><div class="what"><b>Senior Research Engineer, Team Lead</b> <span class="org">· Smart Mobile</span>
+    <ul><li>System and UI development for handsets for China.</li></ul></div></div>
+
+  <div class="job"><div class="when">2002.03 – 2003.01</div><div class="what"><b>Senior Research Engineer</b> <span class="org">· Shinjisoft</span>
+    <ul><li>Handset UI development for China.</li></ul></div></div>
+
+  <div class="job"><div class="when">2001.06 – 2002.01</div><div class="what"><b>Research Engineer</b> <span class="org">· Solborn (Saerom Technology)</span>
+    <ul><li>Call-quality improvement algorithms for a VoIP service.</li></ul></div></div>
+
+  <div class="job"><div class="when">1997.10 – 2001.06</div><div class="what"><b>Research Engineer</b> <span class="org">· LG Dacom, CTI team</span>
+    <ul><li>Planned and built Korea's first ARS collect-call service (Dacom CEO Award).</li></ul></div></div>
+</section>
+
+<section id="patents">
+  <h2>Patents</h2>
+  <ul class="plain">
+    <li><a href="https://patents.google.com/patent/KR102835457B1/en">Method for analyzing log data</a> — KR 10-2835457, registered 2025-07-18 (inventor; assignee Nethru Inc.).</li>
+    <li>Two patent applications filed in 2026 on the LLM agent policy layer (details withheld until publication).</li>
+  </ul>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+  <ul class="plain">
+    <li><b>KAIST</b> — M.S., Computer Science</li>
+    <li><b>POSTECH</b> — B.S., Computer Science and Engineering</li>
+  </ul>
+</section>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <div class="skill-row"><div class="k">LLM agents</div><div class="chips"><span>Tool-calling harnesses</span><span>Deterministic policy layers</span><span>LangGraph</span><span>Pydantic AI</span><span>Plan-and-execute / DAG</span><span>NL→SQL</span><span>Trajectory forensics</span><span>τ-bench · SOPBench evaluation</span></div></div>
+  <div class="skill-row"><div class="k">Knowledge &amp; RAG</div><div class="chips"><span>Ontology design</span><span>Neo4j</span><span>Semantic layer</span><span>Hybrid retrieval (BM25 · vector · KG · RRF)</span><span>Modular RAG</span></div></div>
+  <div class="skill-row"><div class="k">Training</div><div class="chips"><span>SFT</span><span>DPO</span><span>RLVR</span><span>LoRA</span><span>PyTorch</span></div></div>
+  <div class="skill-row"><div class="k">Serving &amp; infra</div><div class="chips"><span>vLLM (on-prem &amp; cloud GPUs)</span><span>KV-cache capacity planning</span><span>Docker</span><span>ClickHouse</span><span>Python</span><span>TypeScript / React</span></div></div>
+  <div class="skill-row"><div class="k">ML platforms</div><div class="chips"><span>Prediction (LightGBM ensembles)</span><span>Recommendation (RecBole)</span><span>ML platform design</span></div></div>
+  <div class="skill-row"><div class="k">Leadership</div><div class="chips"><span>AI division head</span><span>Industry–academia research</span><span>National R&amp;D programs</span><span>Agile SW quality</span><span>Japan / China delivery</span></div></div>
+</section>
+
+<footer>© 2026 Geunho Lee · <a href="ko/">한국어</a></footer>
+</div>
+</body>
+</html>
